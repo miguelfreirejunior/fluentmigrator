@@ -19,6 +19,7 @@
 using System;
 using System.Data;
 using FluentMigrator.Infrastructure;
+using System.Data.Common;
 
 namespace FluentMigrator.Builders.Execute
 {
@@ -26,7 +27,7 @@ namespace FluentMigrator.Builders.Execute
     {
         void Sql(string sqlStatement);
         void Script(string pathToSqlScript);
-        void WithConnection(Action<IDbConnection, IDbTransaction> operation);
+        void WithConnection(Action<DbConnection, DbTransaction> operation);
         void EmbeddedScript(string EmbeddedSqlScriptName);
     }
 }

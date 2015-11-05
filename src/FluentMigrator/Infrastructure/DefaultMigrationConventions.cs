@@ -19,6 +19,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using FluentMigrator.Infrastructure.Extensions;
 using FluentMigrator.Model;
@@ -95,7 +96,7 @@ namespace FluentMigrator.Infrastructure
 
         public static bool TypeIsVersionTableMetaData(Type type)
         {
-            return typeof(IVersionTableMetaData).IsAssignableFrom(type) && type.HasAttribute<VersionTableMetaDataAttribute>();
+            return typeof(IVersionTableMetaData).IsAssignableFrom(type) && type.GetTypeInfo().HasAttribute<VersionTableMetaDataAttribute>();
         }
 
         public static IMigrationInfo GetMigrationInfoFor(Type migrationType)
