@@ -96,13 +96,17 @@ namespace FluentMigrator.Infrastructure
 
         public static bool TypeIsVersionTableMetaData(Type type)
         {
-            return typeof(IVersionTableMetaData).IsAssignableFrom(type) && type.GetTypeInfo().HasAttribute<VersionTableMetaDataAttribute>();
+            return typeof(IVersionTableMetaData).IsAssignableFrom(type) && type.HasAttribute<VersionTableMetaDataAttribute>();
         }
 
         public static IMigrationInfo GetMigrationInfoFor(Type migrationType)
         {
             var migrationAttribute = migrationType.GetOneAttribute<MigrationAttribute>();
+#if DNXCORE50
+            Func<IMigration> migrationFunc = () => (IMigration)Activator.CreateInstance(migrationType.GetTypeInfo().Assembly.GetType(migrationType.FullName));
+#else
             Func<IMigration> migrationFunc = () => (IMigration)migrationType.Assembly.CreateInstance(migrationType.FullName);
+#endif
             var migrationInfo = new MigrationInfo(migrationAttribute.Version, migrationAttribute.Description, migrationAttribute.TransactionBehavior, migrationFunc);
 
             foreach (MigrationTraitAttribute traitAttribute in migrationType.GetAllAttributes<MigrationTraitAttribute>())
@@ -113,7 +117,11 @@ namespace FluentMigrator.Infrastructure
 
         public static string GetWorkingDirectory()
         {
+#if DNXCORE50
+            return System.IO.Directory.GetCurrentDirectory();
+#else
             return Environment.CurrentDirectory;
+#endif
         }
 
         public static string GetConstraintName(ConstraintDefinition expression)

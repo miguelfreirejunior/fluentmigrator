@@ -21,7 +21,11 @@ using System.Runtime.Serialization;
 
 namespace FluentMigrator.Exceptions
 {
+#if DNXCORE50
+    [DataContract]
+#else
     [Serializable]
+#endif
     public abstract class FluentMigratorException : Exception
     {
         protected FluentMigratorException()
@@ -36,8 +40,10 @@ namespace FluentMigrator.Exceptions
         {
         }
 
+#if !DNXCORE50
         protected FluentMigratorException(SerializationInfo info, StreamingContext context) : base(info, context)
         {
         }
+#endif
     }
 }
