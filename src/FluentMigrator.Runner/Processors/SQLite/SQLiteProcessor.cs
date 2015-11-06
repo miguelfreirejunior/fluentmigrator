@@ -32,7 +32,7 @@ namespace FluentMigrator.Runner.Processors.SQLite
             get { return "SQLite"; }
         }
 
-        public SQLiteProcessor(IDbConnection connection, IMigrationGenerator generator, IAnnouncer announcer, IMigrationProcessorOptions options, IDbFactory factory)
+        public SQLiteProcessor(DbConnection connection, IMigrationGenerator generator, IAnnouncer announcer, IMigrationProcessorOptions options, IDbFactory factory)
             : base(connection, factory, generator, announcer, options)
         {
         }
@@ -49,7 +49,7 @@ namespace FluentMigrator.Runner.Processors.SQLite
 
         public override bool ColumnExists(string schemaName, string tableName, string columnName)
         {
-            var dataSet = Read("PRAGMA table_info([{0}])", tableName);
+            var dataSet = ((DataSetContainer)Read("PRAGMA table_info([{0}])", tableName)).DataSet;
             return dataSet.Tables.Count > 0 && dataSet.Tables[0].Select(string.Format("Name='{0}'", columnName.Replace("'", "''"))).Length > 0;
         }
 
@@ -93,7 +93,7 @@ namespace FluentMigrator.Runner.Processors.SQLite
             }
         }
 
-        public override DataSet ReadTableData(string schemaName, string tableName)
+        public override IDataSet ReadTableData(string schemaName, string tableName)
         {
             return Read("select * from [{0}]", tableName);
         }
@@ -186,7 +186,7 @@ namespace FluentMigrator.Runner.Processors.SQLite
             }
         }
 
-        public override DataSet Read(string template, params object[] args)
+        public override IDataSet Read(string template, params object[] args)
         {
             EnsureConnectionIsOpen();
 
@@ -195,7 +195,7 @@ namespace FluentMigrator.Runner.Processors.SQLite
             {
                 var adapter = Factory.CreateDataAdapter(command);
                 adapter.Fill(ds);
-                return ds;
+                return new DataSetContainer(ds);
             }
         }
     }

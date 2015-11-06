@@ -23,6 +23,7 @@ using FluentMigrator.Runner.Processors.Jet;
 using FluentMigrator.Tests.Helpers;
 using NUnit.Framework;
 using NUnit.Should;
+using FluentMigrator.Runner;
 
 namespace FluentMigrator.Tests.Integration.Processors.Jet
 {
@@ -80,7 +81,7 @@ namespace FluentMigrator.Tests.Integration.Processors.Jet
             {
                 AddTestData(table);
 
-                DataSet ds = Processor.Read("SELECT * FROM {0}", table.Name);
+                DataSet ds = ((DataSetContainer)Processor.Read("SELECT * FROM {0}", table.Name)).DataSet;
 
                 ds.ShouldNotBeNull();
                 ds.Tables.Count.ShouldBe(1);
@@ -96,7 +97,7 @@ namespace FluentMigrator.Tests.Integration.Processors.Jet
             {
                 AddTestData(table);
 
-                DataSet ds = Processor.ReadTableData(null, table.Name);
+                DataSet ds = ((DataSetContainer)Processor.ReadTableData(null, table.Name)).DataSet;
 
                 ds.ShouldNotBeNull();
                 ds.Tables.Count.ShouldBe(1);

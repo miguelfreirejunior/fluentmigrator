@@ -13,14 +13,15 @@
 
     using NUnit.Framework;
     using NUnit.Should;
+    using System.Data.Common;
 
     [TestFixture]
     [Category("Integration")]
     public class Db2SchemaTests : BaseSchemaTests
     {
         #region Properties
-
-        public System.Data.IDbConnection Connection
+         
+        public DbConnection Connection
         {
             get;
             set;

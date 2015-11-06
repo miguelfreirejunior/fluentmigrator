@@ -7,6 +7,7 @@ using FluentMigrator.Runner.Processors;
 using FluentMigrator.Runner.Processors.SqlServer;
 using NUnit.Framework;
 using NUnit.Should;
+using FluentMigrator.Runner;
 
 namespace FluentMigrator.Tests.Integration.Processors.SqlServerCe
 {
@@ -53,7 +54,7 @@ namespace FluentMigrator.Tests.Integration.Processors.SqlServerCe
             Processor.TableExists("NOTUSED", "TestTable1");
 
             var dataset = Processor.ReadTableData("NOTUSED", "TestTable1");
-            dataset.Tables[0].Rows.Count.ShouldBe(1);
+            ((DataSetContainer)dataset).DataSet.Tables[0].Rows.Count.ShouldBe(1);
         }
 
         [Test]
@@ -66,7 +67,7 @@ namespace FluentMigrator.Tests.Integration.Processors.SqlServerCe
             Processor.TableExists("NOTUSED", "TestTable1");
 
             var dataset = Processor.ReadTableData("NOTUSED", "TestTable1");
-            dataset.Tables[0].Rows.Count.ShouldBe(1);
+            ((DataSetContainer)dataset).DataSet.Tables[0].Rows.Count.ShouldBe(1);
         }
 
         [Test]
@@ -79,7 +80,7 @@ namespace FluentMigrator.Tests.Integration.Processors.SqlServerCe
             Processor.TableExists("NOTUSED", "TestTable1");
 
             var dataset = Processor.ReadTableData("NOTUSED", "TestTable1");
-            dataset.Tables[0].Rows.Count.ShouldBe(1);
+            ((DataSetContainer)dataset).DataSet.Tables[0].Rows.Count.ShouldBe(1);
         }
 
         private void RecreateDatabase()

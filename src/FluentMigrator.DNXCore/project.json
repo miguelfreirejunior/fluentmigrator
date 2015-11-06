@@ -1,11 +1,16 @@
 {
-  "version": "1.0.0-*",
-  "description": "FluentMigrator Class Library",
-  "authors": [ "Daniel" ],
+  "version": "1.6.1-alpha-2",
+  "description": "FluentMigrator DNX Core Port",
+  "authors": [ "Daniel Mirmilshteyn" ],
   "tags": [ "" ],
   "projectUrl": "",
   "licenseUrl": "",
   "frameworks": {
+    "net35": {
+      "frameworkAssemblies": {
+        "System.Data": { }
+      }
+    },
     "dnx451": {
       "frameworkAssemblies": {
         "System.Data": "4.0.0.0"

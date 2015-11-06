@@ -21,12 +21,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FluentMigrator.MSBuild", "s
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{64A04012-A9E7-4DE9-8927-DD1DD5E2523A}"
 	ProjectSection(SolutionItems) = preProject
+		global.json = global.json
 		src\SolutionInfo.cs = src\SolutionInfo.cs
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FluentMigrator.SchemaDump", "src\FluentMigrator.SchemaDump\FluentMigrator.SchemaDump.csproj", "{F81E3EAB-CD44-4B55-A0EC-16F05CB45413}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "FluentMigrator", "src\FluentMigrator\FluentMigrator.xproj", "{392C93F3-427B-4A6C-BCDB-0C645AEDEE49}"
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "FluentMigrator.DNXCore", "src\FluentMigrator.DNXCore\FluentMigrator.DNXCore.xproj", "{392C93F3-427B-4A6C-BCDB-0C645AEDEE49}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

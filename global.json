@@ -1,0 +1,3 @@
+{
+  "projects": ["src/FluentMigrator.DNXCore", "src/FluentMigrator.Tests"]
+}

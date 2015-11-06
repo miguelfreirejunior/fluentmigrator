@@ -32,3 +32,5 @@ src/FluentMigrator.T4.Tests/IntialMigrationCode.cs
 
 #StyleCop
 *.StyleCop
+/.vs/config
+/packages

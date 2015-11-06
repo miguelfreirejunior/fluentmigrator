@@ -29,6 +29,8 @@ using FluentMigrator.Runner.Processors.SQLite;
 using Moq;
 using NUnit.Framework;
 using NUnit.Should;
+using System.Data.Common;
+using FluentMigrator.Runner;
 
 namespace FluentMigrator.Tests.Integration.Processors.SQLite
 {
@@ -36,7 +38,7 @@ namespace FluentMigrator.Tests.Integration.Processors.SQLite
     [Category("Integration")]
     public class SQLiteProcessorTests
     {
-        private IDbConnection _connection;
+        private DbConnection _connection;
         private SQLiteProcessor _processor;
         private Mock<ColumnDefinition> column;
         private IDbCommand _command;
@@ -116,7 +118,7 @@ namespace FluentMigrator.Tests.Integration.Processors.SQLite
             var expression = new CreateTableExpression { TableName = tableNameThanMustBeEscaped };
             expression.Columns.Add(column.Object);
             _processor.Process(expression);
-            _processor.ReadTableData(null, tableNameThanMustBeEscaped).Tables.Count.ShouldBe(1);
+            ((DataSetContainer)_processor.ReadTableData(null, tableNameThanMustBeEscaped)).DataSet.Tables.Count.ShouldBe(1);
         }
 
         [Test]

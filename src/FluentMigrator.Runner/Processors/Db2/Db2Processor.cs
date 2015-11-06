@@ -7,12 +7,13 @@
     using FluentMigrator.Runner.Generators;
     using FluentMigrator.Runner.Generators.DB2;
     using FluentMigrator.Runner.Helpers;
+    using System.Data.Common;
 
     public class Db2Processor : GenericProcessorBase
     {
         #region Constructors
 
-        public Db2Processor(IDbConnection connection, IMigrationGenerator generator, IAnnouncer announcer, IMigrationProcessorOptions options, IDbFactory factory)
+        public Db2Processor(DbConnection connection, IMigrationGenerator generator, IAnnouncer announcer, IMigrationProcessorOptions options, IDbFactory factory)
             : base(connection, factory, generator, announcer, options)
         {
             this.Quoter = new Db2Quoter();
@@ -113,7 +114,7 @@
             }
         }
 
-        public override DataSet Read(string template, params object[] args)
+        public override IDataSet Read(string template, params object[] args)
         {
             this.EnsureConnectionIsOpen();
 
@@ -122,11 +123,11 @@
             {
                 var adapter = Factory.CreateDataAdapter(command);
                 adapter.Fill(ds);
-                return ds;
+                return new DataSetContainer(ds);
             }
         }
 
-        public override DataSet ReadTableData(string schemaName, string tableName)
+        public override IDataSet ReadTableData(string schemaName, string tableName)
         {
             var schemaAndTable = !string.IsNullOrEmpty(schemaName) ? this.Quoter.QuoteSchemaName(schemaName) + "." + this.Quoter.QuoteTableName(tableName) : this.Quoter.QuoteTableName(tableName);
             return this.Read("SELECT * FROM {0}", schemaAndTable);

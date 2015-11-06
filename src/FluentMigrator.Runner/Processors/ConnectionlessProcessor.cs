@@ -28,12 +28,12 @@ namespace FluentMigrator.Runner.Processors
             Process(string.Format(template, args));
         }
 
-        public System.Data.DataSet ReadTableData(string schemaName, string tableName)
+        public IDataSet ReadTableData(string schemaName, string tableName)
         {
             throw new NotImplementedException("Method is not supported by the connectionless processor");
         }
 
-        public System.Data.DataSet Read(string template, params object[] args)
+        public IDataSet Read(string template, params object[] args)
         {
             throw new NotImplementedException("Method is not supported by the connectionless processor");
         }

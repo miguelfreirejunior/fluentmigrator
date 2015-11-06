@@ -109,6 +109,10 @@
     <AssemblyOriginatorKeyFile>..\FluentMigrator.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="FluentMigrator.DNXCore, Version=1.6.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\FluentMigrator.DNXCore.1.6.1-alpha1\lib\net35\FluentMigrator.DNXCore.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -135,6 +139,7 @@
     <Compile Include="Announcers\TextWriterAnnouncer.cs" />
     <Compile Include="Announcers\TextWriterWithGoAnnouncer.cs" />
     <Compile Include="CompatabilityMode.cs" />
+    <Compile Include="DataSetContainer.cs" />
     <Compile Include="Generators\Postgres\PostgresDescriptionGenerator.cs" />
     <Compile Include="Generators\SqlServer\SqlServer2014Generator.cs" />
     <Compile Include="Generators\Hana\HanaColumn.cs" />
@@ -344,6 +349,7 @@
     <Content Include="SQLServerCENative\x86\sqlcese40.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">

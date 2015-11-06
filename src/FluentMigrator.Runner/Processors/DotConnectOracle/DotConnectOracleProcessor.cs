@@ -19,6 +19,7 @@
 using System;
 using System.Data;
 using FluentMigrator.Builders.Execute;
+using System.Data.Common;
 
 namespace FluentMigrator.Runner.Processors.DotConnectOracle
 {
@@ -29,7 +30,7 @@ namespace FluentMigrator.Runner.Processors.DotConnectOracle
             get { return "Oracle"; }
         }
 
-        public DotConnectOracleProcessor(IDbConnection connection, IMigrationGenerator generator, IAnnouncer announcer, IMigrationProcessorOptions options, DotConnectOracleDbFactory factory)
+        public DotConnectOracleProcessor(DbConnection connection, IMigrationGenerator generator, IAnnouncer announcer, IMigrationProcessorOptions options, DotConnectOracleDbFactory factory)
             : base(connection, factory, generator, announcer, options)
         {
         }
@@ -148,7 +149,7 @@ namespace FluentMigrator.Runner.Processors.DotConnectOracle
             }
         }
 
-        public override DataSet ReadTableData(string schemaName, string tableName)
+        public override IDataSet ReadTableData(string schemaName, string tableName)
         {
             if (tableName == null)
                 throw new ArgumentNullException("tableName");
@@ -159,7 +160,7 @@ namespace FluentMigrator.Runner.Processors.DotConnectOracle
             return Read("SELECT * FROM {0}.{1}", schemaName.ToUpper(), tableName.ToUpper());
         }
 
-        public override DataSet Read(string template, params object[] args)
+        public override IDataSet Read(string template, params object[] args)
         {
             if (template == null)
                 throw new ArgumentNullException("template");
@@ -171,7 +172,7 @@ namespace FluentMigrator.Runner.Processors.DotConnectOracle
             {
                 var adapter = Factory.CreateDataAdapter(command);
                 adapter.Fill(result);
-                return result;
+                return new DataSetContainer(result);
             }
         }
 

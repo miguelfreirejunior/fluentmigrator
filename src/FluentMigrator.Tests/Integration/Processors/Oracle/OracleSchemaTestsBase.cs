@@ -10,13 +10,14 @@ using FluentMigrator.Runner.Processors.Oracle;
 
 using NUnit.Framework;
 using NUnit.Should;
+using System.Data.Common;
 
 namespace FluentMigrator.Tests.Integration.Processors.Oracle {
 	[Category("Integration")]
 	public abstract class OracleSchemaTestsBase : BaseSchemaTests
 	{
 		private const string SchemaName = "test";
-		private IDbConnection Connection { get; set; }
+		private DbConnection Connection { get; set; }
 		private OracleProcessor Processor { get; set; }
 		private IDbFactory Factory { get; set; }
 
