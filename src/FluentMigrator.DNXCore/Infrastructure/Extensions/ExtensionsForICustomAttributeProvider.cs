@@ -23,7 +23,7 @@ namespace FluentMigrator.Infrastructure.Extensions
 {
     public static class ExtensionsForICustomAttributeProvider
     {
-#if DNXCORE50
+#if NETSTANDARD
         public static T GetOneAttribute<T>(this Type member)
 #else
         public static T GetOneAttribute<T>(this ICustomAttributeProvider member)
@@ -33,14 +33,14 @@ namespace FluentMigrator.Infrastructure.Extensions
             return member.GetOneAttribute<T>(false);
         }
 
-#if DNXCORE50
+#if NETSTANDARD
         public static T GetOneAttribute<T>(this Type member, bool inherit)
 #else
         public static T GetOneAttribute<T>(this ICustomAttributeProvider member, bool inherit)
 #endif
             where T : Attribute
         {
-#if DNXCORE50
+#if NETSTANDARD
             T[] attributes = member.GetTypeInfo().GetCustomAttributes(typeof(T), inherit) as T[];
 #else
             T[] attributes = member.GetCustomAttributes(typeof(T), inherit) as T[];
@@ -52,7 +52,7 @@ namespace FluentMigrator.Infrastructure.Extensions
                 return attributes[0];
         }
 
-#if DNXCORE50
+#if NETSTANDARD
         public static T[] GetAllAttributes<T>(this Type member)
 #else
         public static T[] GetAllAttributes<T>(this ICustomAttributeProvider member)
@@ -62,21 +62,21 @@ namespace FluentMigrator.Infrastructure.Extensions
             return member.GetAllAttributes<T>(false);
         }
 
-#if DNXCORE50
+#if NETSTANDARD
         public static T[] GetAllAttributes<T>(this Type member, bool inherit)
 #else
         public static T[] GetAllAttributes<T>(this ICustomAttributeProvider member, bool inherit)
 #endif
             where T : Attribute
         {
-#if DNXCORE50
+#if NETSTANDARD
             return member.GetTypeInfo().GetCustomAttributes(typeof(T), inherit) as T[];
 #else
             return member.GetCustomAttributes(typeof(T), inherit) as T[];
 #endif
         }
 
-#if DNXCORE50
+#if NETSTANDARD
         public static bool HasAttribute<T>(this Type member)
 #else
         public static bool HasAttribute<T>(this ICustomAttributeProvider member)
@@ -86,14 +86,14 @@ namespace FluentMigrator.Infrastructure.Extensions
             return member.HasAttribute<T>(false);
         }
 
-#if DNXCORE50
+#if NETSTANDARD
         public static bool HasAttribute<T>(this Type member, bool inherit)
 #else
         public static bool HasAttribute<T>(this ICustomAttributeProvider member, bool inherit)
 #endif
             where T : Attribute
         {
-#if DNXCORE50
+#if NETSTANDARD
             return member.GetTypeInfo().IsDefined(typeof(T), inherit);
 #else
             return member.IsDefined(typeof(T), inherit);

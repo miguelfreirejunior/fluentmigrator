@@ -102,7 +102,7 @@ namespace FluentMigrator.Infrastructure
         public static IMigrationInfo GetMigrationInfoFor(Type migrationType)
         {
             var migrationAttribute = migrationType.GetOneAttribute<MigrationAttribute>();
-#if DNXCORE50
+#if NETSTANDARD
             Func<IMigration> migrationFunc = () => (IMigration)Activator.CreateInstance(migrationType.GetTypeInfo().Assembly.GetType(migrationType.FullName));
 #else
             Func<IMigration> migrationFunc = () => (IMigration)migrationType.Assembly.CreateInstance(migrationType.FullName);
@@ -117,7 +117,7 @@ namespace FluentMigrator.Infrastructure
 
         public static string GetWorkingDirectory()
         {
-#if DNXCORE50
+#if NETSTANDARD
             return System.IO.Directory.GetCurrentDirectory();
 #else
             return Environment.CurrentDirectory;

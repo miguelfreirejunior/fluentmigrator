@@ -1,3 +1,6 @@
 {
+  "sdk": {
+    "version": "1.0.0-preview1-002702"
+  },
   "projects": ["src/FluentMigrator.DNXCore", "src/FluentMigrator.Tests"]
 }

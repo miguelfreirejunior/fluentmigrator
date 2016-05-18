@@ -61,7 +61,7 @@ namespace FluentMigrator.Builders.Delete
         private static DeletionDataDefinition GetData(object dataAsAnonymousType)
         {
             var data = new DeletionDataDefinition();
-#if DNXCORE50
+#if NETSTANDARD
             var properties = dataAsAnonymousType.GetType().GetTypeInfo().DeclaredProperties;
 
             foreach (var property in properties) 

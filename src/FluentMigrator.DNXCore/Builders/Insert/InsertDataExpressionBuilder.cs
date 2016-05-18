@@ -75,7 +75,7 @@ namespace FluentMigrator.Builders.Insert
         {
             var data = new Dictionary<string, object>();
 
-#if DNXCORE50
+#if NETSTANDARD
             var properties = dataAsAnonymousType.GetType().GetTypeInfo().DeclaredProperties;
 
             foreach (var property in properties) 

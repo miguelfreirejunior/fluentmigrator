@@ -61,7 +61,7 @@ namespace FluentMigrator.Builders.Update
         private static List<KeyValuePair<string, object>> GetData(object dataAsAnonymousType)
         {
             var data = new List<KeyValuePair<string, object>>();
-#if DNXCORE50
+#if NETSTANDARD
             var properties = dataAsAnonymousType.GetType().GetTypeInfo().DeclaredProperties;
 
             foreach (var property in properties)
