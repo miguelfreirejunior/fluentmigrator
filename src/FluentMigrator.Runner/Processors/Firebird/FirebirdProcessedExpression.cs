@@ -7,6 +7,7 @@ using FluentMigrator.Builders.Execute;
 using FluentMigrator.Expressions;
 using FluentMigrator.Model;
 using FluentMigrator.Runner.Generators.Firebird;
+using System.Data.Common;
 
 namespace FluentMigrator.Runner.Processors.Firebird
 {
@@ -125,7 +126,7 @@ namespace FluentMigrator.Runner.Processors.Firebird
             CanUndo = true;
             FirebirdSchemaProvider schema = new FirebirdSchemaProvider(Processor);
             FirebirdTableSchema table = schema.GetTableSchema(expression.TableName);
-            using (DataSet ds = Processor.ReadTableData(String.Empty, expression.TableName))
+            using (DataSet ds = ((DataSetContainer)Processor.ReadTableData(String.Empty, expression.TableName)).DataSet)
             {
                 foreach (DeletionDataDefinition deletion in expression.Rows)
                 {
@@ -167,7 +168,7 @@ namespace FluentMigrator.Runner.Processors.Firebird
             
             CanUndo = true;
 
-            using (DataSet ds = Processor.ReadTableData(String.Empty, expression.TableName))
+            using (DataSet ds = ((DataSetContainer)Processor.ReadTableData(String.Empty, expression.TableName)).DataSet)
             {
                 foreach (DataRow dr in ds.Tables[0].Rows)
                 {
@@ -284,7 +285,7 @@ namespace FluentMigrator.Runner.Processors.Firebird
                 SchemaName = expression.SchemaName
             };
 
-            using (DataSet data = Processor.ReadTableData(String.Empty, expression.TableName))
+            using (DataSet data = ((DataSetContainer)Processor.ReadTableData(String.Empty, expression.TableName)).DataSet)
             {
                 int columnCount = data.Tables[0].Columns.Count;
 
@@ -334,7 +335,7 @@ namespace FluentMigrator.Runner.Processors.Firebird
 
             CanUndo = true;
 
-            using (DataSet ds = Processor.ReadTableData(String.Empty, expression.TableName))
+            using (DataSet ds = ((DataSetContainer)Processor.ReadTableData(String.Empty, expression.TableName)).DataSet)
             {
                 //Create columns
                 foreach (string columnName in expression.ColumnNames)
@@ -389,10 +390,10 @@ namespace FluentMigrator.Runner.Processors.Firebird
 
         #endregion
 
-        public void Undo(IDbConnection connection)
+        public void Undo(DbConnection connection)
         {
             UndoExpressions.ForEach(x => {
-                using(IDbTransaction transaction = connection.BeginTransaction())
+                using(DbTransaction transaction = connection.BeginTransaction())
                 {
                     Run(x, connection, transaction);
                     transaction.Commit();
@@ -400,7 +401,7 @@ namespace FluentMigrator.Runner.Processors.Firebird
             });
         }
 
-        protected void Run(IMigrationExpression expression, IDbConnection connection, IDbTransaction transaction)
+        protected void Run(IMigrationExpression expression, DbConnection connection, DbTransaction transaction)
         {
             if (expression is PerformDBOperationExpression)
             {

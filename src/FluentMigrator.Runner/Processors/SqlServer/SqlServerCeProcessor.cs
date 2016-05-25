@@ -25,6 +25,7 @@ using System.IO;
 using FluentMigrator.Builders.Execute;
 using System.Text;
 using System.Collections.Generic;
+using System.Data.Common;
 
 namespace FluentMigrator.Runner.Processors.SqlServer
 {
@@ -43,7 +44,7 @@ namespace FluentMigrator.Runner.Processors.SqlServer
             }
         }
 
-        public SqlServerCeProcessor(IDbConnection connection, IMigrationGenerator generator, IAnnouncer announcer, IMigrationProcessorOptions options, IDbFactory factory)
+        public SqlServerCeProcessor(DbConnection connection, IMigrationGenerator generator, IAnnouncer announcer, IMigrationProcessorOptions options, IDbFactory factory)
             : base(connection, factory, generator, announcer, options)
         {
         }
@@ -101,12 +102,12 @@ namespace FluentMigrator.Runner.Processors.SqlServer
             }
         }
 
-        public override DataSet ReadTableData(string schemaName, string tableName)
+        public override IDataSet ReadTableData(string schemaName, string tableName)
         {
             return Read("SELECT * FROM [{0}]", tableName);
         }
 
-        public override DataSet Read(string template, params object[] args)
+        public override IDataSet Read(string template, params object[] args)
         {
             EnsureConnectionIsOpen();
 
@@ -115,7 +116,7 @@ namespace FluentMigrator.Runner.Processors.SqlServer
             {
                 var adapter = Factory.CreateDataAdapter(command);
                 adapter.Fill(ds);
-                return ds;
+                return new DataSetContainer(ds);
             }
         }
 

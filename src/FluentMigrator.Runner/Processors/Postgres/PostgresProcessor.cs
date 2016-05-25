@@ -4,6 +4,7 @@ using System.IO;
 using FluentMigrator.Builders.Execute;
 using FluentMigrator.Runner.Generators.Postgres;
 using FluentMigrator.Runner.Helpers;
+using System.Data.Common;
 
 namespace FluentMigrator.Runner.Processors.Postgres
 {
@@ -24,7 +25,7 @@ namespace FluentMigrator.Runner.Processors.Postgres
             }
         }
 
-        public PostgresProcessor(IDbConnection connection, IMigrationGenerator generator, IAnnouncer announcer, IMigrationProcessorOptions options, IDbFactory factory)
+        public PostgresProcessor(DbConnection connection, IMigrationGenerator generator, IAnnouncer announcer, IMigrationProcessorOptions options, IDbFactory factory)
             : base(connection, factory, generator, announcer, options)
         {
         }
@@ -64,7 +65,7 @@ namespace FluentMigrator.Runner.Processors.Postgres
             return Exists("select * from information_schema.sequences where sequence_catalog = current_catalog and sequence_schema ='{0}' and sequence_name = '{1}'", FormatToSafeSchemaName(schemaName), FormatToSafeName(sequenceName));
         }
 
-        public override DataSet ReadTableData(string schemaName, string tableName)
+        public override IDataSet ReadTableData(string schemaName, string tableName)
         {
             return Read("SELECT * FROM {0}.{1}", quoter.QuoteSchemaName(schemaName), quoter.QuoteTableName(tableName));
         }
@@ -75,7 +76,7 @@ namespace FluentMigrator.Runner.Processors.Postgres
             return Exists("select * from information_schema.columns where table_schema = '{0}' and table_name = '{1}' and column_name = '{2}' and column_default like '{3}'", FormatToSafeSchemaName(schemaName), FormatToSafeName(tableName), FormatToSafeName(columnName), defaultValueAsString);
         }
 
-        public override DataSet Read(string template, params object[] args)
+        public override IDataSet Read(string template, params object[] args)
         {
             EnsureConnectionIsOpen();
 
@@ -84,7 +85,7 @@ namespace FluentMigrator.Runner.Processors.Postgres
             {
                 var adapter = Factory.CreateDataAdapter(command);
                 adapter.Fill(ds);
-                return ds;
+                return new DataSetContainer(ds);
             }
         }
 

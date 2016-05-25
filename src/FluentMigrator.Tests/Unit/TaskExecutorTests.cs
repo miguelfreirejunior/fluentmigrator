@@ -33,7 +33,7 @@ namespace FluentMigrator.Tests.Unit
             const string profile = "Debug";
             var dataSet = new DataSet();
             dataSet.Tables.Add(new DataTable());
-            processor.Setup(x => x.ReadTableData(null, It.IsAny<string>())).Returns(dataSet);
+            processor.Setup(x => ((DataSetContainer)x.ReadTableData(null, It.IsAny<string>())).DataSet).Returns(dataSet);
 
             _migrationRunner.SetupGet(x => x.Processor).Returns(processor.Object);
 

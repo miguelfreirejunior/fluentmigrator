@@ -74,12 +74,12 @@ namespace FluentMigrator.Runner.Processors.Jet
             }
         }
 
-        public override DataSet ReadTableData(string schemaName, string tableName)
+        public override IDataSet ReadTableData(string schemaName, string tableName)
         {
             return Read("SELECT * FROM [{0}]", tableName);
         }
 
-        public override DataSet Read(string template, params object[] args)
+        public override IDataSet Read(string template, params object[] args)
         {
             EnsureConnectionIsOpen();
 
@@ -88,7 +88,7 @@ namespace FluentMigrator.Runner.Processors.Jet
             using (var adapter = new OleDbDataAdapter(command))
             {
                 adapter.Fill(ds);
-                return ds;
+                return new DataSetContainer(ds);
             }
         }
 

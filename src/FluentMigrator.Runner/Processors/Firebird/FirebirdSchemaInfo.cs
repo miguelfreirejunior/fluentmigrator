@@ -41,7 +41,7 @@ namespace FluentMigrator.Runner.Processors.Firebird
         {
             var quoter = new FirebirdQuoter();
             var fbTableName = quoter.ToFbObjectName(tableName);
-            return new TableInfo(processor.Read(query, AdoHelper.FormatValue(fbTableName)).Tables[0].Rows[0]);
+            return new TableInfo(((DataSetContainer)processor.Read(query, AdoHelper.FormatValue(fbTableName))).DataSet.Tables[0].Rows[0]);
         }
     }
 
@@ -95,7 +95,7 @@ namespace FluentMigrator.Runner.Processors.Firebird
         }
         public static List<ColumnInfo> Read(FirebirdProcessor processor, TableInfo table)
         {
-            using (DataSet ds = processor.Read(query, AdoHelper.FormatValue(table.Name)))
+            using (DataSet ds = ((DataSetContainer)processor.Read(query, AdoHelper.FormatValue(table.Name))).DataSet)
             {
                 List<ColumnInfo> rows = new List<ColumnInfo>();
                 foreach (DataRow dr in ds.Tables[0].Rows)
@@ -222,7 +222,7 @@ namespace FluentMigrator.Runner.Processors.Firebird
             IsUnique = drIndex["rdb$unique_flag"].ToString().Trim() == "1";
             IsAscending = drIndex["rdb$index_type"].ToString().Trim() == "0";
             Columns = new List<string>();
-            using (DataSet dsColumns = processor.Read(indexFieldQuery, AdoHelper.FormatValue(Name)))
+            using (DataSet dsColumns = ((DataSetContainer)processor.Read(indexFieldQuery, AdoHelper.FormatValue(Name))).DataSet)
             {
                 foreach (DataRow indexColumn in dsColumns.Tables[0].Rows)
                     Columns.Add(indexColumn["rdb$field_name"].ToString().Trim());
@@ -231,7 +231,7 @@ namespace FluentMigrator.Runner.Processors.Firebird
 
         public static List<IndexInfo> Read(FirebirdProcessor processor, TableInfo table)
         {
-            using (DataSet ds = processor.Read(query, AdoHelper.FormatValue(table.Name)))
+            using (DataSet ds = ((DataSetContainer)processor.Read(query, AdoHelper.FormatValue(table.Name))).DataSet)
             {
                 List<IndexInfo> rows = new List<IndexInfo>();
                 foreach (DataRow dr in ds.Tables[0].Rows)
@@ -242,7 +242,7 @@ namespace FluentMigrator.Runner.Processors.Firebird
 
         public static IndexInfo Read(FirebirdProcessor processor, string indexName)
         {
-            using (DataSet ds = processor.Read(singleQuery, AdoHelper.FormatValue(indexName)))
+            using (DataSet ds = ((DataSetContainer)processor.Read(singleQuery, AdoHelper.FormatValue(indexName))).DataSet)
             {
                 return new IndexInfo(ds.Tables[0].Rows[0], processor);
             }
@@ -279,7 +279,7 @@ namespace FluentMigrator.Runner.Processors.Firebird
 
             if (IsForeignKey)
             {
-                using (DataSet dsForeign = processor.Read(colQuery, AdoHelper.FormatValue(Name)))
+                using (DataSet dsForeign = ((DataSetContainer)processor.Read(colQuery, AdoHelper.FormatValue(Name))).DataSet)
                 {
                     DataRow drForeign = dsForeign.Tables[0].Rows[0];
                     ForeignIndex = IndexInfo.Read(processor, drForeign["rdb$const_name_uq"].ToString().Trim());
@@ -310,7 +310,7 @@ namespace FluentMigrator.Runner.Processors.Firebird
 
         public static List<ConstraintInfo> Read(FirebirdProcessor processor, TableInfo table)
         {
-            using (DataSet ds = processor.Read(query, AdoHelper.FormatValue(table.Name)))
+            using (DataSet ds = ((DataSetContainer)processor.Read(query, AdoHelper.FormatValue(table.Name))).DataSet)
             {
                 List<ConstraintInfo> rows = new List<ConstraintInfo>();
                 foreach (DataRow dr in ds.Tables[0].Rows)
@@ -347,7 +347,7 @@ namespace FluentMigrator.Runner.Processors.Firebird
 
         public static List<TriggerInfo> Read(FirebirdProcessor processor, TableInfo table)
         {
-            using (DataSet ds = processor.Read(query, AdoHelper.FormatValue(table.Name)))
+            using (DataSet ds = ((DataSetContainer)processor.Read(query, AdoHelper.FormatValue(table.Name))).DataSet)
             {
                 List<TriggerInfo> rows = new List<TriggerInfo>();
                 foreach (DataRow dr in ds.Tables[0].Rows)
@@ -368,7 +368,7 @@ namespace FluentMigrator.Runner.Processors.Firebird
         private SequenceInfo(DataRow drSequence, FirebirdProcessor processor)
         {
             Name = drSequence["rdb$generator_name"].ToString().Trim();
-            using (DataSet ds = processor.Read(queryValue, Name))
+            using (DataSet ds = ((DataSetContainer)processor.Read(queryValue, Name)).DataSet)
             {
                 CurrentValue = AdoHelper.GetIntValue(ds.Tables[0].Rows[0]["gen_val"]) ?? 0;
             }
@@ -377,7 +377,7 @@ namespace FluentMigrator.Runner.Processors.Firebird
         public static SequenceInfo Read(FirebirdProcessor processor, string sequenceName)
         {
             var fbSequenceName = new FirebirdQuoter().ToFbObjectName(sequenceName);
-            using (DataSet ds = processor.Read(query, AdoHelper.FormatValue(fbSequenceName)))
+            using (DataSet ds = ((DataSetContainer)processor.Read(query, AdoHelper.FormatValue(fbSequenceName))).DataSet)
             {
                 return new SequenceInfo(ds.Tables[0].Rows[0], processor);
             }

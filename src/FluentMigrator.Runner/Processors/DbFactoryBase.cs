@@ -57,7 +57,7 @@ namespace FluentMigrator.Runner.Processors
 
         #region IDbFactory Members
 
-        public IDbConnection CreateConnection(string connectionString)
+        public DbConnection CreateConnection(string connectionString)
         {
             var connection = Factory.CreateConnection();
             connection.ConnectionString = connectionString;

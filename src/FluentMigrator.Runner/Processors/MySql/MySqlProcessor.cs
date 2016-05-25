@@ -22,6 +22,7 @@ using System;
 using System.Data;
 using FluentMigrator.Builders.Execute;
 using FluentMigrator.Runner.Generators.MySql;
+using System.Data.Common;
 
 namespace FluentMigrator.Runner.Processors.MySql
 {
@@ -34,7 +35,7 @@ namespace FluentMigrator.Runner.Processors.MySql
             get { return "MySql"; }
         }
 
-        public MySqlProcessor(IDbConnection connection, IMigrationGenerator generator, IAnnouncer announcer, IMigrationProcessorOptions options, IDbFactory factory)
+        public MySqlProcessor(DbConnection connection, IMigrationGenerator generator, IAnnouncer announcer, IMigrationProcessorOptions options, IDbFactory factory)
             : base(connection, factory, generator, announcer, options)
         {
         }
@@ -123,12 +124,12 @@ namespace FluentMigrator.Runner.Processors.MySql
             }
         }
 
-        public override DataSet ReadTableData(string schemaName, string tableName)
+        public override IDataSet ReadTableData(string schemaName, string tableName)
         {
             return Read("select * from {0}", quoter.QuoteTableName(tableName));
         }
 
-        public override DataSet Read(string template, params object[] args)
+        public override IDataSet Read(string template, params object[] args)
         {
             EnsureConnectionIsOpen();
 
@@ -139,7 +140,7 @@ namespace FluentMigrator.Runner.Processors.MySql
 
                 var adapter = Factory.CreateDataAdapter(command);
                 adapter.Fill(ds);
-                return ds;
+                return new DataSetContainer(ds);
             }
         }
 
@@ -192,7 +193,7 @@ SELECT CONCAT(
   FROM INFORMATION_SCHEMA.COLUMNS
  WHERE TABLE_NAME = '{0}' AND COLUMN_NAME = '{1}'", FormatHelper.FormatSqlEscape(expression.TableName), FormatHelper.FormatSqlEscape(expression.OldName));
 
-            var columnDefinition = Read(columnDefinitionSql).Tables[0].Rows[0].Field<string>(0);
+            var columnDefinition = ((DataSetContainer)Read(columnDefinitionSql)).DataSet.Tables[0].Rows[0].Field<string>(0);
 
             Process(Generator.Generate(expression) + columnDefinition);
         }

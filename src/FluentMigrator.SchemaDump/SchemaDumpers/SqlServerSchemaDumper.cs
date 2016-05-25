@@ -50,12 +50,12 @@ namespace FluentMigrator.SchemaDump.SchemaDumpers
 
         public virtual DataSet ReadTableData(string tableName)
         {
-            return Processor.Read("SELECT * FROM [{0}]", tableName);
+            return ((DataSetContainer)Processor.Read("SELECT * FROM [{0}]", tableName)).DataSet;
         }
 
         public virtual DataSet Read(string template, params object[] args)
         {
-            return Processor.Read(template, args);
+            return ((DataSetContainer)Processor.Read(template, args)).DataSet;
         }
 
         public virtual void Process(PerformDBOperationExpression expression)

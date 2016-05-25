@@ -27,6 +27,7 @@ using FluentMigrator.Tests.Helpers;
 using NUnit.Framework;
 using NUnit.Should;
 using Npgsql;
+using FluentMigrator.Runner;
 
 namespace FluentMigrator.Tests.Integration.Processors.Postgres
 {
@@ -80,7 +81,7 @@ namespace FluentMigrator.Tests.Integration.Processors.Postgres
             {
                 AddTestData(table);
 
-                DataSet ds = Processor.Read("SELECT * FROM {0}", table.Name);
+                DataSet ds = ((DataSetContainer)Processor.Read("SELECT * FROM {0}", table.Name)).DataSet;
 
                 ds.ShouldNotBeNull();
                 ds.Tables.Count.ShouldBe(1);
@@ -96,7 +97,7 @@ namespace FluentMigrator.Tests.Integration.Processors.Postgres
             {
                 AddTestData(table);
 
-                DataSet ds = Processor.ReadTableData(null, table.Name);
+                DataSet ds = ((DataSetContainer)Processor.ReadTableData(null, table.Name)).DataSet;
 
                 ds.ShouldNotBeNull();
                 ds.Tables.Count.ShouldBe(1);
@@ -125,7 +126,7 @@ namespace FluentMigrator.Tests.Integration.Processors.Postgres
             {
                 AddTestData(table);
 
-                DataSet ds = Processor.Read("SELECT * FROM {0}", table.NameWithSchema);
+                DataSet ds = ((DataSetContainer)Processor.Read("SELECT * FROM {0}", table.NameWithSchema)).DataSet;
 
                 ds.ShouldNotBeNull();
                 ds.Tables.Count.ShouldBe(1);
@@ -141,7 +142,7 @@ namespace FluentMigrator.Tests.Integration.Processors.Postgres
             {
                 AddTestData(table);
 
-                DataSet ds = Processor.ReadTableData("TestSchema", table.Name);
+                DataSet ds = ((DataSetContainer)Processor.ReadTableData("TestSchema", table.Name)).DataSet;
 
                 ds.ShouldNotBeNull();
                 ds.Tables.Count.ShouldBe(1);

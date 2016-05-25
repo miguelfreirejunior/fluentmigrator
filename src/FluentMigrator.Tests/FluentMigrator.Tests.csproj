@@ -110,6 +110,10 @@
     <Reference Include="FirebirdSql.Data.FirebirdClient">
       <HintPath>..\..\lib\FirebirdSql.Data.FirebirdClient.dll</HintPath>
     </Reference>
+    <Reference Include="FluentMigrator.DNXCore, Version=1.6.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\FluentMigrator.DNXCore.1.6.1-alpha-2\lib\net35\FluentMigrator.DNXCore.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Oracle.DataAccess">
       <HintPath>..\..\lib\Oracle.DataAccess.dll</HintPath>
     </Reference>
@@ -505,13 +509,10 @@
       <Project>{CB468AD6-60C2-42E9-B3B0-01968EF94C65}</Project>
       <Name>FluentMigrator.Runner</Name>
     </ProjectReference>
-    <ProjectReference Include="..\FluentMigrator\FluentMigrator.csproj">
-      <Project>{FD9410F9-6FEA-47F7-A78E-B4F6FB0539B8}</Project>
-      <Name>FluentMigrator</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="FluentMigrator.snk" />
+    <None Include="packages.config" />
     <None Include="Resources\aliases.conf" />
     <None Include="Resources\firebird.conf" />
     <None Include="Resources\firebird.msg" />

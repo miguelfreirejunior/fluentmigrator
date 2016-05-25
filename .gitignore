@@ -21,6 +21,7 @@ UpgradeLog.XML
 pulls/*.patch
 src/*.vs10x
 *.vs10x
+.vs/
 src/FluentMigrator.Tests/FluentMigrator.VisualState.xml
 examplecommand.txt
 *.crunchproject.local.xml
@@ -32,3 +33,5 @@ src/FluentMigrator.T4.Tests/IntialMigrationCode.cs
 
 #StyleCop
 *.StyleCop
+/.vs/config
+/packages

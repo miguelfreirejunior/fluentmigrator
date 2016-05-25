@@ -8,6 +8,7 @@ using FluentMigrator.Expressions;
 using FluentMigrator.Model;
 using FluentMigrator.Runner.Generators.Firebird;
 using FluentMigrator.Runner.Helpers;
+using System.Data.Common;
 
 namespace FluentMigrator.Runner.Processors.Firebird
 {
@@ -37,7 +38,7 @@ namespace FluentMigrator.Runner.Processors.Firebird
             }
         }
 
-        public FirebirdProcessor(IDbConnection connection, IMigrationGenerator generator, IAnnouncer announcer, IMigrationProcessorOptions options, IDbFactory factory, FirebirdOptions fbOptions)
+        public FirebirdProcessor(DbConnection connection, IMigrationGenerator generator, IAnnouncer announcer, IMigrationProcessorOptions options, IDbFactory factory, FirebirdOptions fbOptions)
             : base(connection, factory, generator, announcer, options)
         {
             if (fbOptions == null)
@@ -93,13 +94,13 @@ namespace FluentMigrator.Runner.Processors.Firebird
             return Exists("select rdb$trigger_name from rdb$triggers where (lower(rdb$relation_name) = lower('{0}')) and (lower(rdb$trigger_name) = lower('{1}'))", FormatToSafeName(tableName), FormatToSafeName(triggerName));
         }
 
-        public override DataSet ReadTableData(string schemaName, string tableName)
+        public override IDataSet ReadTableData(string schemaName, string tableName)
         {
             CheckTable(tableName);
             return Read("SELECT * FROM {0}", quoter.QuoteTableName(tableName));
         }
 
-        public override DataSet Read(string template, params object[] args)
+        public override IDataSet Read(string template, params object[] args)
         {
             EnsureConnectionIsOpen();
 
@@ -110,7 +111,7 @@ namespace FluentMigrator.Runner.Processors.Firebird
             {
                 var adapter = Factory.CreateDataAdapter(command);
                 adapter.Fill(ds);
-                return ds;
+                return new DataSetContainer(ds);
             }
         }
 
@@ -619,7 +620,7 @@ namespace FluentMigrator.Runner.Processors.Firebird
             InsertDataExpression data = new InsertDataExpression();
             data.TableName = tableDef.Name;
             data.SchemaName = tableDef.SchemaName;
-            using (DataSet ds = ReadTableData(String.Empty, expression.OldName))
+            using (DataSet ds = ((DataSetContainer)ReadTableData(String.Empty, expression.OldName)).DataSet)
             {
                 foreach (DataRow dr in ds.Tables[0].Rows)
                 {

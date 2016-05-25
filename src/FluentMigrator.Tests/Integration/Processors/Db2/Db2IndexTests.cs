@@ -14,6 +14,7 @@
     using NUnit.Framework;
     using NUnit.Should;
     using FluentMigrator.Tests.Helpers;
+    using System.Data.Common;
 
     [TestFixture]
     [Category("Integration")]
@@ -21,7 +22,7 @@
     {
         #region Properties
 
-        public System.Data.IDbConnection Connection
+        public DbConnection Connection
         {
             get; set;
         }

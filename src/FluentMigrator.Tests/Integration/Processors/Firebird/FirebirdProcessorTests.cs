@@ -10,6 +10,7 @@ using FluentMigrator.Runner.Processors.Firebird;
 using FluentMigrator.Tests.Helpers;
 using NUnit.Framework;
 using NUnit.Should;
+using FluentMigrator.Runner;
 
 namespace FluentMigrator.Tests.Integration.Processors.Firebird
 {
@@ -52,7 +53,7 @@ namespace FluentMigrator.Tests.Integration.Processors.Firebird
                 Processor.CheckTable(table.Name);
                 AddTestData(table);
 
-                using (DataSet ds = Processor.Read("SELECT * FROM {0}", Quoter.QuoteTableName(table.Name)))
+                using (DataSet ds = ((DataSetContainer)Processor.Read("SELECT * FROM {0}", Quoter.QuoteTableName(table.Name))).DataSet)
                 {
                     ds.ShouldNotBeNull();
                     ds.Tables.Count.ShouldBe(1);
@@ -70,7 +71,7 @@ namespace FluentMigrator.Tests.Integration.Processors.Firebird
                 Processor.CheckTable(table.Name);
                 AddTestData(table);
 
-                using (DataSet ds = Processor.ReadTableData(null, table.Name))
+                using (DataSet ds = ((DataSetContainer)Processor.ReadTableData(null, table.Name)).DataSet)
                 {
                     ds.ShouldNotBeNull();
                     ds.Tables.Count.ShouldBe(1);
@@ -103,7 +104,7 @@ namespace FluentMigrator.Tests.Integration.Processors.Firebird
                 Processor.CheckTable(table.Name);
                 AddTestData(table);
 
-                using (DataSet ds = Processor.Read("SELECT * FROM {0}", Quoter.QuoteTableName(table.Name)))
+                using (DataSet ds = ((DataSetContainer)Processor.Read("SELECT * FROM {0}", Quoter.QuoteTableName(table.Name))).DataSet)
                 {
                     ds.ShouldNotBeNull();
                     ds.Tables.Count.ShouldBe(1);
@@ -121,7 +122,7 @@ namespace FluentMigrator.Tests.Integration.Processors.Firebird
                 Processor.CheckTable(table.Name);
                 AddTestData(table);
 
-                using (var ds = Processor.ReadTableData("TestSchema", table.Name))
+                using (var ds = ((DataSetContainer)Processor.ReadTableData("TestSchema", table.Name)).DataSet)
                 {
                     ds.ShouldNotBeNull();
                     ds.Tables.Count.ShouldBe(1);
@@ -162,7 +163,7 @@ namespace FluentMigrator.Tests.Integration.Processors.Firebird
                     Sequence = { Name = "Sequence", StartWith = 6 }
                 });
 
-                using (DataSet ds = Processor.Read("SELECT GEN_ID(\"Sequence\", 1) as generated_value FROM RDB$DATABASE"))
+                using (DataSet ds = ((DataSetContainer)Processor.Read("SELECT GEN_ID(\"Sequence\", 1) as generated_value FROM RDB$DATABASE")).DataSet)
                 {
                     ds.Tables[0].ShouldNotBeNull();
                     ds.Tables[0].Rows[0].ShouldNotBeNull();
@@ -313,7 +314,7 @@ namespace FluentMigrator.Tests.Integration.Processors.Firebird
                 insert.Rows.Add(item);
                 Processor.Process(insert);
 
-                using (DataSet ds = Processor.ReadTableData(String.Empty, table.Name))
+                using (DataSet ds = ((DataSetContainer)Processor.ReadTableData(String.Empty, table.Name)).DataSet)
                 {
                     ds.Tables.Count.ShouldBe(1);
                     ds.Tables[0].Rows.Count.ShouldBe(1);
@@ -347,7 +348,7 @@ namespace FluentMigrator.Tests.Integration.Processors.Firebird
                 Processor.Process(insert);
                 Processor.Process(insert);
 
-                using (DataSet ds = Processor.ReadTableData(String.Empty, table.Name))
+                using (DataSet ds = ((DataSetContainer)Processor.ReadTableData(String.Empty, table.Name)).DataSet)
                 {
                     ds.Tables.Count.ShouldBe(1);
                     ds.Tables[0].Rows.Count.ShouldBe(5);

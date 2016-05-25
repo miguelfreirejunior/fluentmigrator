@@ -176,9 +176,9 @@ namespace FluentMigrator.Runner.Processors
         {
         }
 
-        public abstract System.Data.DataSet ReadTableData(string schemaName, string tableName);
+        public abstract IDataSet ReadTableData(string schemaName, string tableName);
 
-        public abstract System.Data.DataSet Read(string template, params object[] args);
+        public abstract IDataSet Read(string template, params object[] args);
 
         public abstract bool Exists(string template, params object[] args);
 

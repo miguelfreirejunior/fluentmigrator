@@ -179,7 +179,7 @@ namespace FluentMigrator.Runner
 
             if (!AlreadyCreatedVersionTable) return;
 
-            var dataSet = Processor.ReadTableData(VersionTableMetaData.SchemaName, VersionTableMetaData.TableName);
+            var dataSet = ((DataSetContainer)Processor.ReadTableData(VersionTableMetaData.SchemaName, VersionTableMetaData.TableName)).DataSet;
             
             foreach (DataRow row in dataSet.Tables[0].Rows)
             {

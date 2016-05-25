@@ -1,0 +1,29 @@
+{
+  "version": "1.6.1-alpha-3",
+  "description": "FluentMigrator DNX Core Port",
+  "authors": [ "Daniel Mirmilshteyn" ],
+
+  "frameworks": {
+    "net35": {
+      "frameworkAssemblies": {
+        "System.Data": { }
+      }
+    },
+    "dnx451": {
+      "frameworkAssemblies": {
+        "System.Data": "4.0.0.0"
+      }
+    },
+    "netstandard1.3": {
+      "buildOptions": {
+        "define": [ "NETSTANDARD" ]
+      },
+      "dependencies": {
+        "NETStandard.Library": "1.5.0-rc2-24027",
+        "System.Data.Common": "4.0.1-rc2-24027",
+        "System.Runtime.Serialization.Primitives": "4.1.1-rc2-24027",
+        "System.Reflection.TypeExtensions": "4.1.0-rc2-24027"
+      }
+    }
+  }
+}
